@@ -3,7 +3,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const modalBlock = document.querySelector("#modalBlock");
   const closeModal = document.querySelector("#closeModal");
   const questionTitle = document.querySelector("#question");
-  const formAnswers = document.querySelector("#formAnswers")
+  const formAnswers = document.querySelector("#formAnswers");
+  const burgerName = 'Черный';
+  const burgerImageUrl = '../image/burgerBlack.png';
 
   btnOpenModal.addEventListener("click", () => {
     modalBlock.classList.add("d-block");
@@ -29,8 +31,8 @@ document.addEventListener("DOMContentLoaded", function () {
       <div class="answers-item d-flex justify-content-center">
           <input type="radio" id="answerItem2" name="answer" class="d-none">
           <label for="answerItem2" class="d-flex flex-column justify-content-between">
-          <img class="answerImg" src="./image/burgerBlack.png" alt="burger">
-          <span>Черный</span>
+          <img class="answerImg" src="${burgerImageUrl}" alt="burger">
+          <span>${burgerName}</span>
           </label>
       </div>`
     }
