@@ -4,8 +4,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const closeModal = document.querySelector("#closeModal");
   const questionTitle = document.querySelector("#question");
   const formAnswers = document.querySelector("#formAnswers");
-  const burgerName = 'Черный';
-  const burgerBlackImageUrl = '../image/burgerBlack.png';
+  const burgerName = "Черный";
+  const burgerBlackImageUrl = "../image/burgerBlack.png";
 
   btnOpenModal.addEventListener("click", () => {
     modalBlock.classList.add("d-block");
