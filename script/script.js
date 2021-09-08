@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const questionTitle = document.querySelector("#question");
   const formAnswers = document.querySelector("#formAnswers");
   const burgerName = "Черный";
-  const burgerBlackImageUrl = "./image/burgerBlack.png";
+  const burgerBlackImageUrl = `./image/burgerBlack.png`;
 
   btnOpenModal.addEventListener("click", () => {
     modalBlock.classList.add("d-block");
