@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
       <div class="answers-item d-flex justify-content-center">
           <input type="radio" id="answerItem2" name="answer" class="d-none">
           <label for="answerItem2" class="d-flex flex-column justify-content-between">
-          <img class="answerImg" src="${burgerBlackImageUrl}" alt="burger">
+          <img class="answerImg" src=${burgerBlackImageUrl} alt="burger">
           <span>${burgerName}</span>
           </label>
       </div>`
