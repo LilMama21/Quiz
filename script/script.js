@@ -6,6 +6,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const formAnswers = document.querySelector("#formAnswers");
   const prevButton = document.querySelector("#prev");
   const nextButton = document.querySelector("#next");
+  const sendButton = document.querySelector("#send");
+
   const questions = [
     {
       question: "Какого цвета бургер?",
@@ -81,6 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
     },
   ];
 
+  // Обработчик событий открытия/закрытия модального окна
   btnOpenModal.addEventListener("click", () => {
     modalBlock.classList.add("d-block");
     playTest();
@@ -90,54 +93,120 @@ document.addEventListener("DOMContentLoaded", function () {
     modalBlock.classList.remove("d-block");
   });
 
+  // Функция запуска тестирования
   const playTest = () => {
+    const finalAnswers = [];
+
+    // Переменная номер вопроса
     let numbersQuestion = 0;
 
+    // Функция рендоринга ответов
     const renderAnswers = (index) => {
-      questions[index].answers.forEach((ans) => {
+      questions[index].answers.forEach((answer) => {
         const answerItem = document.createElement("div");
 
-        answerItem.classList.add("answers-item", "d-flex", "flex-column");
+        answerItem.classList.add(
+          "answers-item",
+          "d-flex",
+          "justify-content-center"
+        );
 
         answerItem.innerHTML = `
-				<input type="${questions[index].type}" id="${ans.title}" name="answer" class="d-none">
-				<label for="${ans.title}" class="d-flex flex-column justify-content-between">
-					<img class="answerImg" src="${ans.url}" alt="burger">
-					<span>${ans.title}</span>
+				<input type="${questions[index].type}" id="${answer.title}" name="answer" class="d-none" value="${answer.title}">
+				<label for="${answer.title}" class="d-flex flex-column justify-content-between">
+					<img class="answerImg" src="${answer.url}" alt="burger">
+					<span>${answer.title}</span>
 				</label>
 				`;
         formAnswers.appendChild(answerItem);
       });
     };
 
+    // функции рендеринга вопросов + ответов
     const renderQuestions = (indexQuestion) => {
       formAnswers.innerHTML = "";
 
-      if (numbersQuestion == 0) {
-        prevButton.classList.add("d-none");
-      } else {
-        prevButton.classList.remove("d-none");
+      switch (true) {
+        case numbersQuestion === 0:
+          prevButton.classList.add("d-none");
+          nextButton.classList.remove("d-none");
+          questionTitle.textContent = `${questions[indexQuestion].question}`;
+          renderAnswers(indexQuestion);
+          questionTitle.classList.remove("d-none");
+          break;
+
+        case numbersQuestion >= 0 && numbersQuestion <= questions.length - 1:
+          questionTitle.textContent = `${questions[indexQuestion].question}`;
+          renderAnswers(indexQuestion);
+          nextButton.classList.remove("d-none");
+          prevButton.classList.remove("d-none");
+          // sendButton.classList.add('d-none');
+          questionTitle.classList.remove("d-none");
+          break;
+
+        case numbersQuestion === questions.length:
+          nextButton.classList.add("d-none");
+          prevButton.classList.add("d-none");
+          sendButton.classList.remove("d-none");
+          questionTitle.classList.add("d-none");
+
+          formAnswers.innerHTML = `
+					<div class="form-group">
+						<label for="numberPhone">Введите номер телефона</label>
+						<input type="phone" class="form-control" id="numberPhone">
+					</div>`;
+          break;
+
+        case numbersQuestion === questions.length + 1:
+          formAnswers.textContent = "Спасибо за пройденный тест!";
+          sendButton.classList.add("d-none");
+          setTimeout(() => {
+            modalBlock.classList.remove("d-block");
+          }, 2000);
+          break;
+
+        default:
+          console.log("Что-то пошло не так");
       }
-
-      if (numbersQuestion == questions.length - 1) {
-        nextButton.classList.add("d-none");
-      } else {
-        nextButton.classList.remove("d-none");
-      }
-
-      questionTitle.textContent = `${questions[indexQuestion].question}`;
-
-      renderAnswers(indexQuestion);
     };
+
+    //Запуск функции рендера
     renderQuestions(numbersQuestion);
 
+    const checkAnswer = () => {
+      const obj = {};
+      const inputs = [...formAnswers.elements].filter(
+        (input) => input.checked || input.id === "numberPhone"
+      );
+
+      inputs.forEach((input, index) => {
+        if (numbersQuestion >= 0 && numbersQuestion <= questions.length - 1) {
+          obj[`${index}_${questions[numbersQuestion].question}`] = input.value;
+        }
+        if (numbersQuestion === questions.length) {
+          obj["Номер телефона"] = input.value;
+        }
+      });
+
+      finalAnswers.push(obj);
+    };
+
+    //Обработчики событий кнопок next и prev
     nextButton.onclick = () => {
+      checkAnswer();
       numbersQuestion++;
       renderQuestions(numbersQuestion);
     };
 
     prevButton.onclick = () => {
       numbersQuestion--;
+      renderQuestions(numbersQuestion);
+    };
+
+    sendButton.onclick = () => {
+      checkAnswer();
+      console.log(finalAnswers);
+      numbersQuestion++;
       renderQuestions(numbersQuestion);
     };
   };
